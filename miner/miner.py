@@ -17,7 +17,7 @@ from parser import (
 from word_splitter import split_words
 
 
-redis_client = redis.Redis(host="localhost", port=6379)
+redis_client = redis.Redis(host="redis", port=6379)
 
 
 def process_repository(repo):
