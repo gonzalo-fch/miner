@@ -5,7 +5,7 @@ import time
 
 redis_client = redis.Redis(host="localhost", port=6379)
 
-st.title("Most Used Words in Method Names")
+st.title("Palabras más usadas en nombres de métodos")
 
 top_n = st.slider("Top N words", 5, 50, 10)
 

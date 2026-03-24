@@ -17,7 +17,7 @@ from parser import (
 from word_splitter import split_words
 
 
-redis_client = redis.Redis(host="redis", port=6379)
+redis_client = redis.Redis(host="localhost", port=6379)
 
 
 def process_repository(repo):
@@ -72,26 +72,24 @@ def main():
 
     repositories = (repos_python + repos_java)[:REPOS_TO_ANALYZE]
 
-    total_words = []
+    total_words = 0
 
     for repo in repositories:
 
         words = process_repository(repo)
 
-        total_words.extend(words)
-
         print(f"Extracted {len(words)} words")
 
+        # enviar palabras inmediatamente a redis
+        for w in words:
+            redis_client.lpush("words", w)
+
+        total_words += len(words)
+
+        print("Words sent to Redis")
+
     print("\nMining finished")
-
-    print(f"\nTotal words extracted: {len(total_words)}")
-
-    for w in total_words:
-
-        redis_client.lpush("words", w)
-
-    print("Words sent to Redis")
-
+    print(f"\nTotal words extracted: {total_words}")
 
 if __name__ == "__main__":
     main()
